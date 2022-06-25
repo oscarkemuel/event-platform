@@ -1,5 +1,6 @@
 import { DefaultUi, Player as PlayerReact, Youtube } from "@vime/react";
 import { gql, useQuery } from "@apollo/client";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import {
   CaretRight,
   DiscordLogo,
@@ -37,7 +38,7 @@ interface GetLessonBySlugResponse {
       bio: string;
       avatarURL: string;
     };
-  }
+  };
 }
 interface PlayerProps {
   slug: string;
@@ -46,16 +47,31 @@ interface PlayerProps {
 export function Player({ slug }: PlayerProps) {
   const { data } = useQuery<GetLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, {
     variables: { slug },
-  })
+  });
 
   const lesson = data?.lesson;
 
-  if(!lesson){
+  if(!lesson) {
     return (
-      <div className="flex-1">
-        Carregando...
+      <div className="flex-1 mx-1">
+        <div className="mx-auto">
+          <SkeletonTheme baseColor="#202020" highlightColor="#333">
+            <Skeleton className="h-full w-full max-h-[60vh] aspect-video" />
+            <Skeleton className="w-full max-w-[600px] h-[30px] mt-6" />
+            <div className="mt-2">
+              <Skeleton count={3} className="max-w-[500px]" />
+            </div>
+            <div className="mt-4 grid grid-cols-2 max-w-[200px]">
+              <Skeleton circle className="max-w-[64px] h-[64px]" />
+              <div>
+                <Skeleton className="max-w-[45px] h-[15px]" />
+                <Skeleton className="h-[15px]" count={2} />
+              </div>
+            </div>
+          </SkeletonTheme>
+        </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -72,9 +88,7 @@ export function Player({ slug }: PlayerProps) {
       <div className="p-8 max-w-[1100px] mx-auto">
         <div className="flex items-start gap-16">
           <div className="flex-1">
-            <h1 className="text-2xl font-bold">
-              {lesson.title}
-            </h1>
+            <h1 className="text-2xl font-bold">{lesson.title}</h1>
             <p className="mt-4 text-gray-200 leading-relaxed">
               {lesson.description}
             </p>
