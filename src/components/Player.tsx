@@ -1,4 +1,3 @@
-import { DefaultUi, Player as PlayerReact, Youtube } from "@vime/react";
 import { gql, useQuery } from "@apollo/client";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import {
@@ -8,8 +7,6 @@ import {
   Image,
   Lightning,
 } from "phosphor-react";
-
-import "@vime/core/themes/default.css";
 
 const GET_LESSON_BY_SLUG_QUERY = gql`
   query GetLessonBySlug($slug: String) {
@@ -78,10 +75,13 @@ export function Player({ slug }: PlayerProps) {
     <div className="flex-1">
       <div className="bg-black flex justify-center">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
-          <PlayerReact>
-            <Youtube videoId={lesson.videoId} />
-            <DefaultUi />
-          </PlayerReact>
+          <iframe
+              className="h-full w-full"
+              src={`https://www.youtube.com/embed/${lesson.videoId}`}
+              frameBorder="0"
+              allow="encrypted-media"
+              allowFullScreen
+            />
         </div>
       </div>
 
